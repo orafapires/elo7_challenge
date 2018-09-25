@@ -51,6 +51,7 @@ stop_api_with_compose(){
 
 start_api_with_compose(){
     docker-compose up -d
+    health_check_api
 }
 
 health_check_api(){
@@ -83,6 +84,7 @@ start_api_without_compose(){
         if [ "$?" -eq 1 ]; then
             api "$API"
         fi
+    health_check_api
 }
 
 remove_container(){
