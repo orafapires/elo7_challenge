@@ -2,7 +2,7 @@
 
 # Dependencies
 DOCKER="docker"
-COMPOSE="docker-compose"
+COMPOSE="docker-compose1"
 array=( "$DOCKER" "$COMPOSE" )
 
 # Base URL
@@ -27,10 +27,11 @@ get_state_running(){
 }
 
 execute_api_without_compose(){
+    source run-containers.sh
     MONGO="mongo"
     API="elo7-challenge"
-    docker run -d --name $MONGO --restart always -v db_data:/data/db $MONGO && get_state_running $MONGO
-    docker run -d --name $API -p 5000:5000 --restart always --link $MONGO $API && get_state_running $API
+    mongo "$MONGO" && get_state_running "$MONGO"
+    api "$API" && get_state_running "$API"
 }
 
 health_check_api(){
