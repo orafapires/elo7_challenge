@@ -16,8 +16,21 @@ execute_api_with_compose(){
     docker-compose up -d
 }
 
+get_state_running(){
+    STATE=`docker inspect --format {{.State.Running}} "$1"`
+    if [ "$STATE" == "true" ]; then
+        echo "$1 está em execução"
+    else
+        echo "$1 não está em execução"
+        exit 1
+    fi
+}
+
 execute_api_without_compose(){
-    echo "Instale o $COMPOSE"
+    MONGO="mongo"
+    API="elo7-challenge"
+    docker run -d --name $MONGO --restart always -v db_data:/data/db $MONGO && get_state_running $MONGO
+    docker run -d --name $API -p 5000:5000 --restart always --link $MONGO $API && get_state_running $API
 }
 
 health_check_api(){
