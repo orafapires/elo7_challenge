@@ -19,7 +19,6 @@ DATA='{"component" : "teste", "version" : "2.0", "accountable" : "eu", "status" 
 # Containers
 MONGO="mongo"
 API="elo7-challenge"
-containers=( "$MONGO" "$API" )
 
 command_exists(){
     type "$1" &> /dev/null;
