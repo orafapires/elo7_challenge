@@ -12,7 +12,7 @@ services:
     build: .
     depends_on:
       - mongo
-    image: elo7-challenge
+    image: elo7-challenge:1
     ports:
       - "5000:5000"
     restart: always
