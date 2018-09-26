@@ -97,9 +97,13 @@ remove_container(){
 
 stop_api_without_compose(){
     get_state_running $MONGO
-    remove_container $MONGO
+        if [ "$?" -eq 0 ]; then
+            remove_container $MONGO
+        fi
     get_state_running $API
-    remove_container $API
+        if [ "$?" -eq 0 ]; then
+            remove_container $API
+        fi
 }
 
 check_dependencies
