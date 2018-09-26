@@ -2,7 +2,6 @@
 
 # Mongo
 mongo(){
-    export MONGO="$1"
     docker run -d \
     --name "$MONGO" \
     --restart always \
@@ -11,10 +10,17 @@ mongo(){
 
 # API
 api(){
-    export API="$1"
     docker run -d \
     --name "$API" \
     -p 5000:5000 \
     --restart always \
     --link "$MONGO" "$API"
+}
+
+# Run Containers
+run-containers(){
+    case "$1" in
+    "$MONGO") mongo ;;
+    "$API") api ;;
+    esac
 }
