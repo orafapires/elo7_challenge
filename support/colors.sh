@@ -1,7 +1,7 @@
 #!/bin/bash
 
 color() {
-  local code="\033["
+  local code="\\033["
   case "$1" in
     black  | bk) color="${code}0;30m";;
     red    |  r) color="${code}1;31m";;
