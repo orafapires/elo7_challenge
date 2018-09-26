@@ -65,7 +65,7 @@ stop_api_with_compose(){
 # Start API with docker compose
 start_api_with_compose(){
     docker-compose up -d
-    health_check_api
+    health_check_api "$BASE_URL"
 }
 
 # Health check API
