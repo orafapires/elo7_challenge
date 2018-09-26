@@ -2,3 +2,4 @@ htmlcov
 app.pyc
 __pycache__
 .coverage
+.DS_Store
