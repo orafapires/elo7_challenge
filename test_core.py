@@ -18,14 +18,14 @@ class TestElo7Challenge(unittest.TestCase):
 
     def test_post_error(self):
         item = {"name": "some_item"}
-        self.response = app.post('http://localhost:5001/deploy-time',
+        self.response = app.post('http://localhost:5000/deploy-time',
                                  data=json.dumps(item),
                                  content_type='application/json')
         self.assertEqual(self.response.status_code, 400)
 
     def test_post_sucess(self):
         item = { "component" : "teste", "version" : "2.0", "accountable" : "eu", "status" : "teste"}
-        self.response = app.post('http://localhost:5001/deploy-time',
+        self.response = app.post('http://localhost:5000/deploy-time',
                                  data=json.dumps(item),
                                  content_type='application/json')
         self.assertEqual(self.response.status_code, 200)
