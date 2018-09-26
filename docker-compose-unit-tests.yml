@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+
+  mongo:
+    image: mongo
+    volumes:
+      - db_data_tests:/data/db
+    restart: always
+
+  elo7-challenge:
+    build: .
+    depends_on:
+      - mongo
+    image: elo7-challenge
+    ports:
+      - "5000:5000"
+    restart: always
+
+  elo7-challenge-unit-tests:
+    depends_on: 
+      - elo7-challenge
+    image: python:3
+    volumes:
+      - .:/usr/src/app
+    command: bash -c "cd /usr/src/app; pip install --no-cache-dir -r requirements.txt; pytest test_core.py; pytest --cov-report html --cov=./"
+
+volumes:
+    db_data_tests:
