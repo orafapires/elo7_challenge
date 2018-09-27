@@ -14,7 +14,7 @@ services:
       - mongo
     image: python:3
     volumes:
-      - ./:/usr/src/app
+      - ${PWD}:/usr/src/app
     ports:
       - "5000:5000"
     restart: always
