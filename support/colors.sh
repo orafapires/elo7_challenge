@@ -14,5 +14,5 @@ color() {
     *) local text="$1"
   esac
   [ -z "$text" ] && local text="$color$2${code}0m"
-  echo "$text"
+  echo -e "$text"
 }
