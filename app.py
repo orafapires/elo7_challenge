@@ -7,7 +7,6 @@ from flask import jsonify
 from datetime import datetime
 from flask_pymongo import PyMongo
 import pandas as pd
-from pymongo import MongoClient
 from flask import send_file
 
 elo7_challenge = Flask('elo7_challenge')
@@ -36,17 +35,8 @@ def deploy_time():
         deploytimecollection.insert_one({'component': component, 'version': version, 'accountable': accountable, 'status': status, 'date': date})
         return jsonify({'ok': True, 'message': 'Deploy data stored successfully.'}), 200
 
-def connect_mongo(host, port, username, password, db):
-    if username and password:
-        mongo_uri = 'mongodb://%s:%s@%s:%s/%s' % (username, password, host, port, db)
-        conn = MongoClient(mongo_uri)
-    else:
-        conn = MongoClient(host, port)
-    return conn[db]
-
 def read_mongo(db, collection, query={}, host='mongo', port=27017, username=None, password=None, no_id=True):
-    db = connect_mongo(host=host, port=port, username=username, password=password, db=db)
-    cursor = db[collection].find(query)
+    cursor = mongo.db[collection].find(query)
     df =  pd.DataFrame(list(cursor))
     if no_id and '_id' in df:
         del df['_id']

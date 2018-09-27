@@ -1,2 +1,2 @@
-mongo
-elo7-challenge
+workspace_mongo_1
+workspace_elo7-challenge_1
