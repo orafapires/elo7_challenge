@@ -15,6 +15,9 @@ class TestElo7Challenge(unittest.TestCase):
 
     def test_get(self):
         self.assertEqual(200, self.response.status_code)
+    
+    def test_string_response(self):
+        self.assertEqual("Index Page!", self.response.data.decode('utf-8'))
 
     def test_post_error(self):
         item = {"name": "some_item"}
