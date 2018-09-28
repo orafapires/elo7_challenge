@@ -19,7 +19,7 @@ check_dir(){
             case "$response" in
             "sim") rm -rf "$PROJECT" ;;
             "não") return 0 ;;
-            *) echo "Resposta inválida" ;;
+            *) echo "Resposta inválida" && return 1 ;;
             esac
     else
         return 0
