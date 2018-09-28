@@ -14,7 +14,7 @@ command -v git >/dev/null 2>&1 || {
 # Check if directory project exists
 check_dir(){
     if [ -d "$PROJECT" ]; then
-        echo "O diretório do projeto já existe. Deseja excluí-lo?"
+        echo "O diretório do projeto já existe. Deseja excluí-lo? [s/N]"
         read -r response
             case "$response" in
             [Ss][Ii][Mm]|[Ss]) rm -rf "$PROJECT" ;;
