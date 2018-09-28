@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Listing dependencies
-list=$(cut -d'=' -f1 < requirements.txt)
+list=$(cut -d'=' -f1 < ../requirements.txt)
 
 # Checking if mandatory dependencies have installed
 for i in $list; do
