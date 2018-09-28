@@ -17,9 +17,9 @@ check_dir(){
         echo "O diretório do projeto já existe. Deseja excluí-lo?"
         read -r response
             case "$response" in
-            "sim") rm -rf "$PROJECT" ;;
-            "não") return 0 ;;
-            *) echo "Resposta inválida" && return 1 ;;
+            [Ss][Ii][Mm]|[Ss]) rm -rf "$PROJECT" ;;
+            [Nn][Ãã][Oo]|[Nn]) return 0 ;;
+            *) echo "Resposta inválida" && check_dir ;;
             esac
     else
         return 0
