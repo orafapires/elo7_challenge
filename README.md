@@ -55,9 +55,13 @@ Método: **GET**
 * Responsável: Nome do membro do time de engenharia que * está realizando o processo de deploy
 * Status: Status do processo de deploy
 
+Método: **POST**
+
 > /deploys-export
 
 *Responsável pela exportação dos dados em formato CSV*
+
+Método: **GET**
 
 ---
 
