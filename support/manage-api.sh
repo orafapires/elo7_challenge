@@ -64,7 +64,13 @@ stop_api_with_compose(){
 
 # Start API with docker compose
 start_api_with_compose(){
-    echo "WORKSPACE=$(PWD)" > .env && docker-compose up -d
+    docker-compose up -d
+    health_check_api "$BASE_URL"
+}
+
+# Start API with docker compose in CI
+start_api_with_compose_ci(){
+    docker-compose -f docker-compose-ci.yml up -d
     health_check_api "$BASE_URL"
 }
 
