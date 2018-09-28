@@ -5,15 +5,16 @@ mongo(){
     docker run -d \
     --name "$MONGO" \
     --restart always \
-    -v db_data:/data/db "$MONGO"
+    --volume db_data:/data/db "$MONGO"
 }
 
 # API
 api(){
     docker run -d \
     --name "$API" \
-    -p 5000:5000 \
     --restart always \
+    -p 5000:5000 \
+    --volume "$PWD":/usr/src/app \
     --link "$MONGO" "$API"
 }
 

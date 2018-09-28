@@ -1,25 +1,19 @@
 #!/bin/bash
 
 # Load colors to terminal
-source colors.sh
+source ./support/colors.sh
 
 # Load functions to run containers
-source run-containers.sh
-
-# Dependencies
-DOCKER="docker"
-COMPOSE="docker-compose"
-CURL="curl"
-dependencies=( "$DOCKER" "$COMPOSE" "$CURL" )
+source ./support/run-containers.sh
 
 # Containers
-MONGO=$(grep -i "mongo" containers.txt)
-API=$(grep -i "elo7-challenge" containers.txt)
+MONGO=$(grep -i "mongo" ./support/containers.txt)
+API=$(grep -i "elo7_challenge" ./support/containers.txt)
 containers=( "$MONGO" "$API" )
 
 # Base URL
 prepare_url(){
-    FILE="server.txt"
+    FILE="./support/server.txt"
     if [ -f "$FILE" ]; then
         BASE_URL=$(cat "$FILE")
         color g "URL base da API: $BASE_URL"
@@ -36,12 +30,19 @@ command_exists(){
 
 # Check mandatory dependencies
 check_dependencies(){
-    for dependency in "${dependencies[@]}"; do
-        command_exists "$dependency"
-        if [ "$?" -eq 1 ]; then
-            color r "O $dependency é o mínimo que precisamos para executar a API :)"
-        fi
-    done
+    FILE="./support/dependencies.txt"
+    if [ -f "$FILE" ]; then
+        for dependency in $(cat $FILE); do
+            command_exists "$dependency"
+            if [ "$?" -eq 1 ]; then
+                color r "O $dependency é o mínimo que precisamos para executar a API :)"
+                exit 1
+            fi
+        done
+    else
+        color r "$FILE não encontrado"
+        exit 1
+    fi
 }
 
 # Post data in API
@@ -64,13 +65,7 @@ stop_api_with_compose(){
 
 # Start API with docker compose
 start_api_with_compose(){
-    docker-compose up -d
-    health_check_api "$BASE_URL"
-}
-
-# Start API with docker compose in CI
-start_api_with_compose_ci(){
-    docker-compose -f docker-compose-ci.yml up -d
+    docker-compose up -d --build
     health_check_api "$BASE_URL"
 }
 

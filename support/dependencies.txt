@@ -1,0 +1,3 @@
+curl
+docker
+docker-compose
