@@ -83,4 +83,14 @@ post_to_api '{"component" : "teste", "version" : "2.0", "accountable" : "eu", "s
 
 ---
 
+**Estrutura de apoio**
 
+O script ```manage-api.sh``` realiza o gerenciamento de todo o projeto, inclusive com algumas funções que iniciam a API de forma "manual". A maioria das funções são independentes e estão com instruções de utilização.
+
+---
+
+**Débitos técnicos**
+
+* Autenticação na API
+* Multi-stage no Docker
+* Docker alpine
