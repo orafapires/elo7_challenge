@@ -40,4 +40,3 @@ start_api(){
 
 main
 start_api
-check_dir
