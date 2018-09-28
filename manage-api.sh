@@ -7,13 +7,13 @@ source ./support/colors.sh
 source ./support/run-containers.sh
 
 # Containers
-MONGO=$(grep -i "mongo" ./support/containers.txt)
-API=$(grep -i "elo7_challenge" ./support/containers.txt)
+MONGO=$(grep -i "mongo" ./containers.txt)
+API=$(grep -i "elo7_challenge" ./containers.txt)
 containers=( "$MONGO" "$API" )
 
 # Base URL
 prepare_url(){
-    FILE="./support/server.txt"
+    FILE="./server.txt"
     if [ -f "$FILE" ]; then
         BASE_URL=$(cat "$FILE")
         color g "URL base da API: $BASE_URL"
@@ -30,7 +30,7 @@ command_exists(){
 
 # Check mandatory dependencies
 check_dependencies(){
-    FILE="./support/dependencies.txt"
+    FILE="./dependencies.txt"
     if [ -f "$FILE" ]; then
         for dependency in $(cat $FILE); do
             command_exists "$dependency"
