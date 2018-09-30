@@ -35,6 +35,7 @@ start_api(){
         exit 1
     }
     source ./manage-api.sh
+    stop_api_with_compose
     start_api_with_compose
 }
 
