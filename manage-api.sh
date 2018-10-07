@@ -1,47 +1,33 @@
 #!/bin/bash
 
-# Load colors to terminal
-source ./support/colors.sh
+# Set pwd variable
+export PWD=$(pwd)
 
-# Load functions to run containers
-source ./support/run-containers.sh
+# Loading support scripts
+source "$PWD"/support.sh || {
+    echo "Este arquivo é o mínimo que precisamos para executar a API :)"
+    return 1
+}
+
+# Loading support scripts
+load_support_scripts(){
+    source "$PWD"/support/colors.sh
+    source "$PWD"/support/run-containers.sh
+}
 
 # Containers
-MONGO=$(grep -i "mongo" ./support/containers.txt)
-API=$(grep -i "elo7_challenge" ./support/containers.txt)
+MONGO=$(grep -i "mongo" "$PWD"/support/containers.txt)
+API=$(grep -i "elo7_challenge" "$PWD"/support/containers.txt)
 containers=( "$MONGO" "$API" )
 
 # Base URL
 prepare_url(){
-    FILE="./support/server.txt"
-    if [ -f "$FILE" ]; then
-        BASE_URL=$(cat "$FILE")
+    if [ -f "$PWD/support/server.txt" ]; then
+        BASE_URL=$(cat "$PWD/support/server.txt")
         color g "URL base da API: $BASE_URL"
     else
         BASE_URL="$BASE_URL"
         color g "URL base da API: $BASE_URL"
-    fi
-}
-
-# Check if command exists
-command_exists(){
-    type "$1"
-}
-
-# Check mandatory dependencies
-check_dependencies(){
-    FILE="./support/dependencies.txt"
-    if [ -f "$FILE" ]; then
-        for dependency in $(cat $FILE); do
-            command_exists "$dependency"
-            if [ "$?" -eq 1 ]; then
-                color r "O $dependency é o mínimo que precisamos para executar a API :)"
-                exit 1
-            fi
-        done
-    else
-        color r "$FILE não encontrado"
-        exit 1
     fi
 }
 
@@ -58,61 +44,15 @@ post_to_api(){
     fi
 }
 
-# Stop API with docker compose
-stop_api_with_compose(){
-    docker-compose down
-}
-
 # Start API with docker compose
 start_api_with_compose(){
     docker-compose up -d --build
     health_check_api "$BASE_URL"
 }
 
-# Health check API
-health_check_api(){
-    if [ -z "$1" ]; then
-        color r "Esta função necessita da URL base da API como parâmetro :)"
-    else
-        while true; do
-            RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "$1")
-            if [ "$RESPONSE" -eq 200 ]; then
-                color b "### API em funcionamento ###"
-                break
-            else
-                color r "### API não está em funcionamento ###"
-            fi
-        done
-    fi
-}
-
-# Get running container
-get_running_container(){
-    RUNNING=$(docker ps -a \
-    --format '{{.Names}}' \
-    --format '{{.Status}}' \
-    --filter 'name='"$1"'' \
-    --filter 'status=running')
-    if [ -z "$RUNNING" ]; then
-        color y "### $1 não está em execução ###"
-        return 1
-    else
-        color g "### $1 está em execução ###"
-    fi
-}
-
-# Get exited container
-get_exited_container(){
-    EXITED=$(docker ps -a \
-    --format '{{.Names}}' \
-    --format '{{.Status}}' \
-    --filter 'name='"$1"'' \
-    --filter 'status=exited')
-    if [ -z "$EXITED" ]; then
-        return 0
-    else
-        return 1
-    fi
+# Stop API with docker compose
+stop_api_with_compose(){
+    docker-compose down
 }
 
 # Start API without compose
@@ -132,28 +72,6 @@ start_api_without_compose(){
     health_check_api "$BASE_URL" 
 }
 
-# Remove container
-remove_container(){
-    if [ -z "$1" ]; then
-        color r "É necessário informar o nome ou o ID do container :)"
-    else
-        CONTAINER="$1"
-        color g "Removendo $CONTAINER"
-        docker rm "$CONTAINER"
-    fi
-}
-
-# Kill container
-kill_container(){
-    if [ -z "$1" ]; then
-        color r "É necessário informar o nome ou o ID do container :)"
-    else
-        CONTAINER="$1"
-        color g "Matando $CONTAINER"
-        docker kill "$CONTAINER"
-    fi
-}
-
 # Stop API without compose
 stop_api_without_compose(){
     for container in "${containers[@]}"; do
@@ -165,6 +83,15 @@ stop_api_without_compose(){
     done
 }
 
+# Getting git infos to post in API
+get_git_infos(){
+    COMPONENT=$(git config --get remote.origin.url)
+    COMPONENT=$(echo "${COMPONENT//.git}" | cut -d'/' -f5)
+    AUTHOR=$(git log -1 --pretty=format:'%an')
+}
+
 # Start script
-check_dependencies
+verify_dep_files
+check_dep_installed
+load_support_scripts
 prepare_url
