@@ -110,12 +110,12 @@ kill_container(){
 # Checking if mandatory dependencies have installed
 check_deps_mandatory(){
     for dep in $(cut -d'=' -f1 < "$PWD"/requirements.txt); do
-    pip show "$dep" &> /dev/null;
-    if [ "$?" -eq 1 ]; then
-        echo "$dep não encontrada"
-        exit 1
-    else
-        echo "$dep encontrada"
-    fi
+        pip show "$dep" &> /dev/null;
+        if [ "$?" -eq 1 ]; then
+            echo "$dep não encontrada"
+            exit 1
+        else
+            echo "$dep encontrada"
+        fi
     done
 }
